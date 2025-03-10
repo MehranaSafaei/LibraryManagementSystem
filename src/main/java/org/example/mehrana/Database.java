@@ -60,13 +60,14 @@ public class Database {
     public int login(String phoneNumber, String email) {
         int found = -1;
         for (User user : users) {
-            if (user.getPhoneNumber().equals(phoneNumber) && user.getEmail().equals(email)) {
+            if (user.getPhoneNumber().equals(phoneNumber) && user.getEmail().equalsIgnoreCase(email)) {
                 found = users.indexOf(user);
                 break;
             }
         }
         return found;
     }
+
 
     public User getUser(int n) {
         return users.get(n);
@@ -84,22 +85,34 @@ public class Database {
             BufferedReader br = new BufferedReader(new FileReader(usersfile));
             String str;
             while ((str = br.readLine()) != null) {
-                text += str + "\n";
+                text += str.trim() + "\n";  // Trim any leading/trailing spaces
             }
         } catch (Exception e) {
             System.err.println(e.toString());
         }
-        if (!text.matches("") || !text.isEmpty()) {
-            String[] str = text.split("<NewUser/>");
-            for (String s : str) {
-                String[] str2 = s.split("<N/>");
-                System.out.println(s);
+
+        if (!text.isEmpty()) {
+            // Split the text into separate user data by <NewUser/>
+            String[] users = text.split("<NewUser/>");
+
+            for (String userData : users) {
+                // Trim each user data part to avoid leading/trailing spaces or newlines
+                userData = userData.trim();
+
+                // Split the data by <N/>
+                String[] str2 = userData.split("<N/>");
+
+                System.out.println(userData);
                 System.out.println("Split Data Length: " + str2.length);
-                if (str.length <= 4) {
-                    System.err.println("Data format error! There is not enough data for this user!");
-                    continue;
+
+                // Skip users with invalid data (less than 4 fields)
+                if (str2.length < 4) {
+                    System.out.println("Skipping invalid user data: " + userData);
+                    continue;  // Skip this user if data is incomplete
                 }
-                if (str2[3].matches("Admin")) {
+
+                // Create the appropriate user based on role
+                if (str2[3].equals("Admin")) {
                     User user = new Admin(str2[0], str2[1], str2[2]);
                     addUser(user);
                 } else {
@@ -108,6 +121,9 @@ public class Database {
                 }
             }
         }
+    }
+    public ArrayList<User> getAllUser(){
+        return users;
     }
 
     private void saveUsers() {

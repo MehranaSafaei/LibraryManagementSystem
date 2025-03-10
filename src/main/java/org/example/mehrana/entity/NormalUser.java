@@ -51,6 +51,6 @@ public class NormalUser extends User {
         scanner.close();
     }
     public String toString(){
-        return name + "<N/>"+ email + "<N/>"+ phoneNumber + "<N/>" + "Admin";
+        return name + "<N/>"+ email + "<N/>"+ phoneNumber + "<N/>" + "NormalUser";
     }
 }

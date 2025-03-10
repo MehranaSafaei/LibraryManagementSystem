@@ -40,21 +40,25 @@ public class Main {
     }
 
 
-    private static void login() {
+    public static void login() {
         System.out.println("Please enter your phone number: ");
         String phoneNumber = scanner.next().trim();  // Get input from user
-        System.out.println("please Enter your email address: ");
-        String email = scanner.next().trim(); //(trim): delete extra spaces
-        System.out.println("login created: " + phoneNumber + " with email: " + email);
-        int n = database.login(phoneNumber, email);
+        System.out.println("Please enter your email address: ");
+        String email = scanner.next().trim();  // (trim): delete extra spaces
+        System.out.println("Login created: " + phoneNumber + " with email: " + email);
+        System.out.println("Checking users in the database:");
+        for (User user : database.getAllUser()) {
+            System.out.println("Phone: " + user.getPhoneNumber() + " | Email: " + user.getEmail());
+        }
+        int n = database.login(email, phoneNumber);
         if (n != -1) {
             User user = database.getUser(n);
-            user.menu(database,user);
+            user.menu(database, user);
         } else {
-            System.out.println("user does`t exist! ");
-            ;
+            System.out.println("User doesn't exist!");
         }
     }
+
 
     private static void newUser() {
         System.out.println("Please enter your name: ");

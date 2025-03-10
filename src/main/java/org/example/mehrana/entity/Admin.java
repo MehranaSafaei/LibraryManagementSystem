@@ -48,6 +48,6 @@ public class Admin extends User {
     }
 
     public String toString(){
-       return name + "<N/>"+ email + "<N/>"+ phoneNumber + "<N/>" + "Admin";
+       return name + "<N/>"+ phoneNumber + "<N/>"+ email + "<N/>" + "Admin";
     }
 }
